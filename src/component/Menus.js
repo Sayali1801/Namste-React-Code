@@ -1,35 +1,37 @@
 import MenuCard from "./MenuCard";
-import { Data } from "../Data";
 import { useState } from 'react';
 import '../styles/Menus.css';
 function Menus() {
-    const [restoList, setRestoList] = useState(Data);
-    function sortData(){
-        const newRestoList=restoList.filter((res)=>res.data.avgRating>4);
-        setRestoList(newRestoList);
-        console.log("button clicked")
-    }
+    const [restoList, setRestoList] = useState([]);
+    fetch(`https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&page_type=DESKTOP_WEB_LISTING`)
+    .then(response=>response.json())
+    .then((apiData)=>{
+        // console.log(apiData)
+        setRestoList(apiData?.data?.cards[2]?.data?.data?.cards)
+        // console.log(apiData.data.cards[2].data.data.cards)
+    })
+
     return (
         <>
-           <button onClick={sortData}>Filter</button>
-
         <div className="menus">
-            {restoList.map((item) => {
-                return (
-                    <section>
-                        <MenuCard
-                            imageId={item.data.cloudinaryImageId}
-                            name={item.data.name}
-                            address={item.data.address}
-                            rating={item.data.avgRating}
-                            costForTwo={item.data.costForTwoString}
-                            delivery={item.data.deliveryTime}
-                        />
-                    </section>
-                )
+             {restoList.map((item) => {
+                 return (
+    <section>
+    <MenuCard
+        imageId={item.data.cloudinaryImageId}
+        name={item.data.name}
+        address={item.data.address}
+        rating={item.data.avgRating}
+        costForTwo={item.data.costForTwoString}
+        delivery={item.data.deliveryTime}
+    />
+</section>
+)
             })}
         </div>
         </>
     )
 }
 export default Menus;
+
+
