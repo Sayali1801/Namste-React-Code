@@ -5,6 +5,8 @@ import Shimar from "./Shimar";
 // import loading from "../assets/loading.gif";
 function Menus() {
   const [restoList, setRestoList] = useState([]);
+  const [inputText, setInputText]=useState('');
+  const [restoFilterData,setRestoFilterData]=useState([]);
   useEffect(() => {
     fetchedData()
   }, []);
@@ -14,6 +16,7 @@ const fetchedData=()=>{
       .then((apiData) => {
         // console.log(apiData)
         setRestoList(apiData?.data?.cards[2]?.data?.data?.cards);
+        setRestoFilterData(apiData?.data?.cards[2]?.data?.data?.cards)
         // console.log(apiData.data.cards[2].data.data.cards)
       });
 }
@@ -22,12 +25,28 @@ if(restoList.length===0){
       <Shimar/>
       )
   }
+  const filterData=()=>{
+    const filterdData=restoList.filter((res)=>res.data.name.toLowerCase().includes(inputText.toLowerCase()))
+    // setRestoList(filterdData);
+    setRestoFilterData(filterdData)
+
+  }
   return (
     <>        
       <div className="home-main">  
+        <input type="search" 
+        placeholder="Type  Here"
+        value={inputText}
+        onChange={((e)=>{
+          // console.log(e.target.value)
+          setInputText(e.target.value)
+        }        
+        )}
+        />
+        <button onClick={filterData}>Search</button>
         </div>
       <div className="menus">
-              {restoList.map((item)=>{
+              {restoFilterData.map((item)=>{
                 return(
                <section>
               <MenuCard
