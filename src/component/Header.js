@@ -1,5 +1,10 @@
+import {useState} from 'react';
 import '../styles/Header.css';
 function Header(){
+    const[login,setLogin]=useState("Log In");
+    const detLogOut=()=>{
+        (login==="Log In")? setLogin("Log Out"):setLogin("Log In")
+    }
     return(
         <section className="header-main">
             <div className="header-left">
@@ -16,6 +21,8 @@ function Header(){
                         <li>About</li>
                         <li>Contact Us</li>
                         <li>Cart</li>
+                        <button onClick={detLogOut}
+                        >{login}</button>
                     </ul>
             </div>
         </section>
